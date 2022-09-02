@@ -157,6 +157,47 @@ paths:
           $ref: '#/components/responses/NotFound'
         '429':
           $ref: '#/components/responses/TooManyRequests'
+  /station/{stationId}/hives:
+    get:
+      summary: 'Get station hive'
+      operationId: getStationByHive
+      tags:
+        - station
+      parameters:
+        - in: path
+          name: stationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 200
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+      responses: 
+        '200':
+          description: "Hives array"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ResponseHives'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
   /station/{stationId}:
     get:
       summary: 'Get station'
@@ -177,6 +218,105 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/ResponseStation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /event:
+    post:
+      summary: 'Register new event'
+      operationId: creationEvent
+      tags:
+        - event
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '201':
+          description: "Hive created"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ResponseCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /events:
+    get:
+      summary: 'Get all event'  
+      operationId: getAllEvent
+      tags:
+        - events
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 200
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - name: station
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: owner
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: "Get all hive"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseHives"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests' 
+  /event/{eventId}:
+    get:
+      summary: 'Get event'
+      operationId: getEventId
+      tags:
+        - event
+      parameters:
+        - in: path
+          name: eventId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: "Hive object"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ResponseHives'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -489,7 +629,34 @@ components:
           format: uuid
         stationUuid:
           type: string
-          format: uuid  
+          format: uuid 
+    Event:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        description:
+          type: string
+          format: string
+    ResponseEvent:
+      type: object
+      required:
+        - id
+        - description
+      properties:
+        id:
+          type: string
+          format: uuid
+        description:
+          type: string
+          format: string
+    ResponseEvents:
+      type: array
+      items: 
+        $ref: '#/components/schemas/Event'
     ResponseHive:
       type: object
       required:
@@ -506,7 +673,7 @@ components:
           type: string
           format: uuid
     ResponseHives:
-      type: object
+      type: array
       items:
         $ref: '#/components/schemas/Hive'
     Owner:
