@@ -1,0 +1,581 @@
+openapi: 3.0.0
+info:
+  version: '1.0.0'
+  title: 'MayaProtect'
+  license:
+    name: AGPL
+servers:
+  - url: 'localhost:3000'
+paths:
+  /user:
+    post:
+      summary: 'Register new user'
+      operationId: createUser
+      tags:
+        - users
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: "User created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /users:
+    get:
+      summary: 'Get all user'
+      operationId: getAllUser
+      tags:
+        - users
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 200
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+      responses:
+        '200':
+          description: Get all user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUsers'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /user/{userId}:
+    get:
+      summary: 'Get user'
+      operationId: getUserById
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: "User object"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /stations:
+    get:
+      summary: 'Get all station'
+      operationId: getAllStation
+      tags:
+        - stations
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 200
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+      responses:
+        '200':
+          description: Get all station
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseStations"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /station:
+    post:
+      summary: 'Register new station'
+      operationId: createStation
+      tags:
+        - station
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Station'
+      responses:
+        '201':
+          description: "Station created"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ResponseCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /station/{stationId}:
+    get:
+      summary: 'Get station'
+      operationId: getStationById
+      tags:
+        - station
+      parameters:
+        - in: path
+          name: stationId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses: 
+        '200':
+          description: "Station object"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ResponseStation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /hive:
+    post:
+      summary: 'Register new hive'
+      operationId: createHive
+      tags:
+        - hive
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Hive'
+      responses:
+        '201':
+          description: "Hive created"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ResponseCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /hives:
+    get:
+      summary: 'Get all hive'
+      operationId: getAllHive
+      tags:
+        - hives
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 200
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - name: station
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: owner
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: "Get all hive"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseHives"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'      
+  /hive/{hiveId}:
+    get:
+      summary: 'Get hive'
+      operationId: getHiveId
+      tags: 
+        - hive
+      parameters:
+        - in: path
+          name: hiveId
+          required: true
+          schema: 
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: "Hive object"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ResponseHives'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /owner:
+    post:
+      summary: 'Register new owner'
+      operationId: createOwner
+      tags:
+        - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Owner'
+      responses:
+        '201':
+          description: "Owner created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /owners:
+    get:
+      summary: 'Get all owner'
+      operationId: getAllOwner
+      tags:
+        - owners
+      parameters:
+        - name: ownerId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 200
+        - name: page
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+      responses:
+        '200':
+          description: Get all owner
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOwners'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /owner/{ownerId}:
+    get:
+      summary: 'Get owner'
+      operationId: getOwnerById
+      tags:
+        - owner
+      parameters:
+        - in: path
+          name: ownerId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: "Owner object"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Owner'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    ResponseUsers:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResponseUser'
+    ResponseUser:
+      type: object
+      required:
+        - id
+        - station
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstname:
+          type: string
+          format: string
+        lastname: 
+          type: string
+          format: string
+        password:
+          type: string
+          format: password
+        email:
+          type: string
+          format: email
+        type:
+          type: string
+          format: string
+        station:
+          type: string
+          format: uuid
+    User:
+      type: object
+      required:
+        - id
+        - firstname
+        - lastname
+        - password
+        - email
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstname:
+          type: string
+          format: string
+        lastname: 
+          type: string
+          format: string
+        password:
+          type: string
+          format: password
+        email:
+          type: string
+          format: email
+        type:
+          type: string
+          format: string
+    Station:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+    ResponseStation:
+      type: object
+      required:
+        - id  
+        - owner
+        - hive
+      properties:
+        id:
+          type: string
+          format: uuid
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+        owner:
+          $ref: '#/components/schemas/Owner'
+        hives:
+          type: array
+          items: 
+            type: string
+            format: uuid     
+    ResponseStations:
+      type: array
+      items: 
+        $ref: '#/components/schemas/ResponseStation'
+    Hive:
+      type: object
+      required:
+        - id
+      properties:
+        id: 
+          type: string
+          format: uuid
+        stationUuid:
+          type: string
+          format: uuid  
+    ResponseHive:
+      type: object
+      required:
+        - id
+        - owner
+        - station
+      properties:
+        id:
+          type: string
+          format: uuid
+        owner:
+          $ref: '#/components/schemas/Owner'
+        station:
+          type: string
+          format: uuid
+    ResponseHives:
+      type: object
+      items:
+        $ref: '#/components/schemas/Hive'
+    Owner:
+      type: object
+      required:
+        - id
+        - name  
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          format: string
+    ResponseOwners:
+      type: array
+      items:
+        $ref: '#/components/schemas/Owner'
+    ResponseOwner:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          format: string
+    ResponseCreated:
+      type: object
+      properties:
+        message:
+          type: string
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+          format: string
+  responses:
+    Unauthorized:
+      description: Not Authorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Forbidden:
+      description: Access Forbidden to this resources
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: Resources not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"    
